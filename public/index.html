@@ -16,34 +16,36 @@
     <button id="send-btn">
         Send Message
     </button>
+    <div id="message-container">
+
+    </div>
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
+
         const socket = io()
-        
-        socket.onAny((event, ...args) => {
-            console.log("📩 Got event:", event, "with data:", args);
-        });
+        const sendBtn = document.getElementById("send-btn");
+        const input = document.getElementById("messageInput");
+        const messageContainer = document.getElementById("message-container");
 
-        socket.onAny((event, ...args) => {
-            if (event === "receiveMessage") {
-                console.warn("receiveMessage seen in onAny but not firing directly!");
-            }
-        });
 
+        // socket.onAny((event, ...args) => {
+        //     console.log("📩 Got event:", event, "with data:", args);
+        // });
+
+        // socket.onAny((event, ...args) => {
+        //     if (event === "receiveMessage") {
+        //         console.warn("receiveMessage seen in onAny but not firing directly!");
+        //     }
+        // });
 
         socket.on("receiveMessage", (message) => {
             console.log("new message from browser: ", message)
+            messageContainer.innerHTML = message
         })
-
         socket.on("connect", () => {
             console.log("Connected to server:", socket.id);
         });
-
-       
-        const sendBtn = document.getElementById("send-btn");
-        const input = document.getElementById("messageInput");
-
         // document.body
         sendBtn.addEventListener("click", (e) => {
             const message = input.value
